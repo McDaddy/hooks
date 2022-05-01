@@ -7,8 +7,10 @@ const useDebouncePlugin: Plugin<any, any[]> = (
   fetchInstance,
   { debounceWait, debounceLeading, debounceTrailing, debounceMaxWait },
 ) => {
+  // debounce方法的ref
   const debouncedRef = useRef<DebouncedFunc<any>>();
 
+  // 将传入的参数转换成lodash.debounce需要的参数
   const options = useMemo(() => {
     const ret: DebounceSettings = {};
     if (debounceLeading !== undefined) {
@@ -24,9 +26,12 @@ const useDebouncePlugin: Plugin<any, any[]> = (
   }, [debounceLeading, debounceTrailing, debounceMaxWait]);
 
   useEffect(() => {
+    // debounceWait不为空时，才会执行debounce
     if (debounceWait) {
+      // 保存原runAsync
       const _originRunAsync = fetchInstance.runAsync.bind(fetchInstance);
 
+      // debouncedRef.current 注册为一个debounce方法
       debouncedRef.current = debounce(
         (callback) => {
           callback();
@@ -48,6 +53,8 @@ const useDebouncePlugin: Plugin<any, any[]> = (
       };
 
       return () => {
+        // debounceWait动态变化时，取消延迟的函数调用
+        // 比如设置了一个很长的debounceWait，第一次触发后，还没开始请求，此时改变debounceWait，就要把那个还没开始的请求取消掉
         debouncedRef.current?.cancel();
         fetchInstance.runAsync = _originRunAsync;
       };
@@ -60,6 +67,7 @@ const useDebouncePlugin: Plugin<any, any[]> = (
 
   return {
     onCancel: () => {
+      // 这个cancel方法是lodash.debounce提供的方法
       debouncedRef.current?.cancel();
     },
   };

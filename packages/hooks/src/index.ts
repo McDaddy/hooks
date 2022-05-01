@@ -48,6 +48,7 @@ import useRafState from './useRafState';
 import useRafTimeout from './useRafTimeout';
 import useReactive from './useReactive';
 import useRequest, { clearCache } from './useRequest';
+import useRequest2 from './useRequest2';
 import { configResponsive, useResponsive } from './useResponsive';
 import useSafeState from './useSafeState';
 import useScroll from './useScroll';
@@ -75,6 +76,7 @@ import useWhyDidYouUpdate from './useWhyDidYouUpdate';
 
 export {
   useRequest,
+  useRequest2,
   useControllableValue,
   useDynamicList,
   useVirtualList,

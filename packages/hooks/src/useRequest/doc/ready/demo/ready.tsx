@@ -5,6 +5,8 @@ import React from 'react';
 function getUsername() {
   return new Promise((resolve) => {
     setTimeout(() => {
+      console.log('call');
+
       resolve(Mock.mock('@name'));
     }, 1000);
   });

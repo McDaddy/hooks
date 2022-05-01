@@ -12,6 +12,8 @@ useRequest 提供了一个 `options.refreshDeps` 参数，当它的值变化后�
 ```tsx | pure
 const [userId, setUserId] = useState('1');
 
+console.log('render');
+
 const { data, run } = useRequest(() => getUserSchool(userId), {
   refreshDeps: [userId],
 });

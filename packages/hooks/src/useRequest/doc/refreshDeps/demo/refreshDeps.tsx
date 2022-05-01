@@ -15,6 +15,7 @@ const userSchool = (id: string) => {
 };
 
 async function getUserSchool(userId: string): Promise<string> {
+  console.log('call', userId);
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(userSchool(userId));
@@ -24,8 +25,12 @@ async function getUserSchool(userId: string): Promise<string> {
 
 export default () => {
   const [userId, setUserId] = useState('1');
-  const { data, loading } = useRequest(() => getUserSchool(userId), {
+  const [ready, setReady] = useState(false);
+
+  const { data, loading } = useRequest((uid) => getUserSchool(userId, uid), {
     refreshDeps: [userId],
+    ready,
+    defaultParams: [{ aaa: 33 }],
   });
 
   return (
@@ -39,6 +44,14 @@ export default () => {
         <option value="2">user 2</option>
         <option value="3">user 3</option>
       </select>
+      <button
+        onClick={() => {
+          setReady(true);
+          setUserId('2');
+        }}
+      >
+        onCLick
+      </button>
       <p>School: {loading ? 'Loading' : data}</p>
     </div>
   );
